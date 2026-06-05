@@ -1,0 +1,498 @@
+/* ========================================
+   FONT FACES
+   ======================================== */
+
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../THEME/fonts/Lemon milk/LEMONMILK-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../THEME/fonts/Lemon milk/LEMONMILK-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../THEME/fonts/Lemon milk/LEMONMILK-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Lemon Milk';
+    src: url('../THEME/fonts/Lemon milk/LEMONMILK-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../THEME/fonts/IBM PLEX MONO/IBMPlexMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../THEME/fonts/IBM PLEX MONO/IBMPlexMono-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../THEME/fonts/IBM PLEX MONO/IBMPlexMono-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Instrument Sans';
+    src: url('../THEME/fonts/instrument sans/InstrumentSans-VariableFont_wdth,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========================================
+   CSS VARIABLES
+   ======================================== */
+
+:root {
+    --color-pink: #F2BDC7;
+    --color-pink-hover: #e8a3b0;
+    --color-beige: #D9C4A1;
+    --color-black: #1A1A1A;
+    --color-white: #FFFFFF;
+    --color-gray-light: #E8E8E8;
+    --color-gray-bg: #D9D9D9;
+    --color-text: #1A1A1A;
+    --color-text-muted: #666666;
+
+    --font-title: 'Lemon Milk', sans-serif;
+    --font-button: 'Instrument Sans', sans-serif;
+    --font-product: 'IBM Plex Mono', monospace;
+    --font-body: 'Instrument Sans', sans-serif;
+
+    --nav-height: 60px;
+}
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background: var(--color-white);
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--nav-height);
+    padding: 0 30px;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.nav-logo {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: var(--color-black);
+    transition: opacity 0.3s ease;
+}
+
+.nav-logo:hover {
+    opacity: 0.7;
+}
+
+.nav-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-light);
+    border-radius: 4px;
+    padding: 8px 16px;
+    width: 280px;
+    transition: border-color 0.3s ease;
+}
+
+.nav-search:focus-within {
+    border-color: var(--color-black);
+}
+
+.nav-search svg {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.nav-search input {
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--color-text);
+    width: 100%;
+    background: transparent;
+}
+
+.nav-search input::placeholder {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    color: var(--color-black);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+    background: var(--color-gray-light);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 380px;
+    background: var(--color-beige);
+    padding: 50px 60px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+}
+
+.hero-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: var(--color-white);
+    letter-spacing: 2px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--color-white);
+    letter-spacing: 4px;
+    font-weight: 400;
+    margin-bottom: 30px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.shop-now-btn {
+    display: inline-block;
+    font-family: var(--font-button);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--color-white);
+    background: var(--color-black);
+    padding: 14px 40px;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-now-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.hero-image {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 300px;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.15));
+}
+
+/* ========================================
+   PRODUCTS SECTION
+   ======================================== */
+
+.products-section {
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-align: center;
+    color: var(--color-black);
+    margin-bottom: 40px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* ========================================
+   PRODUCT CARD
+   ======================================== */
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+}
+
+.product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--color-gray-bg);
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-info {
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.product-name {
+    font-family: var(--font-product);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: var(--color-black);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.product-price {
+    font-family: var(--font-product);
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+.add-to-cart-btn {
+    font-family: var(--font-button);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--color-black);
+    background: var(--color-pink);
+    padding: 12px 30px;
+    border-radius: 2px;
+    width: 100%;
+    max-width: 200px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+    background: var(--color-pink-hover);
+    transform: scale(1.02);
+}
+
+/* ========================================
+   DIVIDER
+   ======================================== */
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--color-gray-light);
+    margin: 0 40px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 16px;
+    }
+
+    .nav-search {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+        padding: 40px 24px;
+        min-height: auto;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .hero-subtitle {
+        letter-spacing: 2px;
+        font-size: 0.7rem;
+    }
+
+    .hero-image {
+        width: 200px;
+    }
+
+    .products-section {
+        padding: 40px 20px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .product-name {
+        font-size: 0.7rem;
+    }
+
+    .product-price {
+        font-size: 0.65rem;
+    }
+
+    .add-to-cart-btn {
+        font-size: 0.6rem;
+        padding: 8px 12px;
+        letter-spacing: 1px;
+    }
+
+    .section-title {
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.3rem;
+    }
+
+    .products-grid {
+        gap: 12px;
+    }
+
+    .product-name {
+        font-size: 0.6rem;
+    }
+
+    .add-to-cart-btn {
+        font-size: 0.55rem;
+        padding: 6px 8px;
+    }
+}
