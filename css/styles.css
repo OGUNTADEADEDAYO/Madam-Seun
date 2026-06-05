@@ -223,11 +223,9 @@ img {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    min-height: 380px;
+    min-height: 420px;
     background: var(--color-beige);
-    padding: 50px 60px;
-    overflow: hidden;
+    padding: 0 60px;
     border-bottom: 1px solid var(--color-gray-light);
 }
 
@@ -235,6 +233,7 @@ img {
     position: relative;
     z-index: 2;
     max-width: 520px;
+    padding: 50px 0;
 }
 
 .hero-title {
@@ -277,22 +276,22 @@ img {
 }
 
 .hero-image {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 60px;
+    bottom: 0;
     z-index: 1;
-    flex-shrink: 0;
-    width: 300px;
-    height: 100%;
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-end;
+    pointer-events: none;
 }
 
 .hero-image img {
-    width: 100%;
-    height: auto;
-    max-height: 360px;
+    height: 100%;
+    width: auto;
     object-fit: contain;
-    object-position: bottom center;
+    object-position: center;
     filter: drop-shadow(0 4px 20px rgba(0,0,0,0.15));
 }
 
@@ -340,7 +339,7 @@ img {
 .product-image {
     width: 100%;
     aspect-ratio: 1 / 1;
-    background: var(--color-gray-bg);
+    background: transparent;
     border-radius: 2px;
     overflow: hidden;
     display: flex;
@@ -434,6 +433,22 @@ img {
     .hero-content {
         max-width: 100%;
         margin-bottom: 30px;
+        padding: 0;
+    }
+
+    .hero-image {
+        position: relative;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        justify-content: center;
+    }
+
+    .hero-image img {
+        height: auto;
+        max-height: 420px;
+        width: auto;
+        max-width: 100%;
     }
 
     .hero-title {
@@ -443,10 +458,6 @@ img {
     .hero-subtitle {
         letter-spacing: 2px;
         font-size: 0.7rem;
-    }
-
-    .hero-image {
-        width: 200px;
     }
 
     .products-section {
