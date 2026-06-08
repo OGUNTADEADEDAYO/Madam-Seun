@@ -64,8 +64,21 @@ document.addEventListener('DOMContentLoaded', () => {
     productCards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(24px)';
-        card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+        // Reset index for staggered animation in batches
+        const delay = (index % 3) * 0.1;
+        card.style.transition = `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`;
         observer.observe(card);
     });
+
+    // --- Scroll to Top functionality ---
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+    if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
 
 });
