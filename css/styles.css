@@ -61,6 +61,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Krona One';
+    src: url('../THEME/fonts/krona one/KronaOne-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* ========================================
    CSS VARIABLES
    ======================================== */
@@ -76,7 +84,7 @@
     --color-text: #1A1A1A;
     --color-text-muted: #666666;
 
-    --font-title: 'Lemon Milk', sans-serif;
+    --font-title: 'Krona One', sans-serif;
     --font-button: 'Instrument Sans', sans-serif;
     --font-product: 'IBM Plex Mono', monospace;
     --font-body: 'Instrument Sans', sans-serif;
@@ -517,13 +525,13 @@ img {
     display: flex;
     justify-content: center;
     background: var(--color-white);
-    padding: 0 40px;
-    margin: 60px 0;
+    padding: 0;
+    margin: 60px 0 0 0;
 }
 
 .video-section video {
     width: 100%;
-    max-width: 1100px;
+    max-width: 100%;
     height: auto;
     object-fit: cover;
 }
@@ -535,23 +543,26 @@ img {
 .category-bar {
     width: 100%;
     background: var(--color-beige);
-    padding: 15px 40px;
+    padding: 0 40px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    border-top: 1px solid var(--color-black);
+    border-bottom: 1px solid var(--color-black);
 }
 
 .category-inner {
     width: 100%;
-    max-width: 1100px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 15px;
 }
 
 .category-link {
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 1.1rem;
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 1;
     color: var(--color-black);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -564,7 +575,7 @@ img {
 
 .category-divider {
     width: 1px;
-    height: 18px;
+    height: 3rem;
     background: var(--color-black);
 }
 
@@ -683,8 +694,8 @@ img {
 
 @media (max-width: 768px) {
     .video-section {
-        padding: 0 20px;
-        margin: 40px 0;
+        padding: 0;
+        margin: 40px 0 0 0;
     }
     .category-bar {
         padding: 15px 20px;

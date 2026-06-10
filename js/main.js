@@ -81,4 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Video Intersection Observer ---
+    const videoElement = document.getElementById('hero-video');
+    if (videoElement) {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const playPromise = videoElement.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Video autoplay prevented by browser:", error);
+                        });
+                    }
+                } else {
+                    videoElement.pause();
+                }
+            });
+        }, { threshold: 0.3 }); // Play when 30% visible
+        videoObserver.observe(videoElement);
+    }
+
 });
