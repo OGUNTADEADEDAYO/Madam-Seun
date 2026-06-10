@@ -101,4 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
         videoObserver.observe(videoElement);
     }
 
+    // --- Category active state (Tab switching) ---
+    const categoryLinks = document.querySelectorAll('.category-link');
+    const tabPanels = document.querySelectorAll('.category-tab-panel');
+
+    categoryLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault(); // Stop the page from jumping
+            
+            // 1. Toggle link active states
+            categoryLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            // 2. Hide all tab panels
+            tabPanels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // 3. Show the targeted tab panel
+            const targetId = link.getAttribute('data-target');
+            if (targetId) {
+                const targetPanel = document.getElementById(targetId);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+            }
+        });
+    });
+
 });
