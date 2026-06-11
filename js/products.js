@@ -2,7 +2,9 @@
 // SEUN — Product Data Catalog
 // ========================================
 
-const PRODUCTS = [
+let PRODUCTS = FALLBACK_PRODUCTS;
+
+const FALLBACK_PRODUCTS = [
 
     // ── BEST SELLERS ──────────────────────────
     {
@@ -340,4 +342,27 @@ function getProductsByCategory(category) {
 // Helper: Format price in Naira
 function formatPrice(amount) {
     return '₦' + amount.toLocaleString('en-NG');
+}
+
+// Fetch products from backend
+async function loadProducts() {
+    try {
+        const res = await fetch('http://localhost:5000/api/products?limit=100');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.products && data.products.length > 0) {
+            PRODUCTS = data.products.map(p => ({
+                id: p.sku || p._id,
+                name: p.name,
+                price: p.price,
+                image: p.images && p.images[0] ? p.images[0].url.replace(/^\//, '') : '',
+                size: p.size,
+                categories: p.tags || [],
+                badge: p.badge,
+                description: p.description
+            }));
+        }
+    } catch (err) {
+        console.error('Failed to load products from API:', err);
+    }
 }

@@ -230,8 +230,13 @@ const Checkout = (() => {
         return isValid;
     }
 
-    // ── WhatsApp Message Builder ──────────────
-    function sendWhatsApp() {
+    // ── Order Processing & WhatsApp Message Builder ──────────────
+    async function sendWhatsApp() {
+        const btn = document.getElementById('checkout-whatsapp-btn');
+        const originalBtnText = btn.innerHTML;
+        btn.innerHTML = 'PROCESSING...';
+        btn.disabled = true;
+
         const name = document.getElementById('checkout-name').value.trim();
         const phone = document.getElementById('checkout-phone').value.trim();
         const email = document.getElementById('checkout-email').value.trim();
@@ -243,7 +248,33 @@ const Checkout = (() => {
         const items = Cart.getItems();
         const total = Cart.getTotal();
 
-        // Build message
+        // 1. Save to Database
+        try {
+            const trackId = 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            const orderPayload = {
+                trackId,
+                name,
+                email,
+                phone,
+                city,
+                address: address + (state ? `, ${state}` : ''),
+                items: items.map(i => ({ name: i.product.name, qty: i.qty, price: i.product.price, size: i.product.size })),
+                total,
+                shippingFee: 'Pending',
+                locCode: city.toLowerCase() === 'lagos' ? 'LOS' : 'OTHER'
+            };
+
+            await fetch('http://localhost:5000/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderPayload)
+            });
+        } catch (err) {
+            console.error('Failed to save order to database:', err);
+            // We proceed to WhatsApp anyway as fallback
+        }
+
+        // 2. Build message
         let message = `🛍️ *NEW ORDER — SEUN PERFUMES*\n`;
         message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
@@ -282,6 +313,9 @@ const Checkout = (() => {
         Toast.show('Order sent! Redirecting to WhatsApp...', 'success', 4000);
         Cart.clear();
         close();
+        
+        btn.innerHTML = originalBtnText;
+        btn.disabled = false;
     }
 
     return { init, open, close };

@@ -2,8 +2,12 @@
 // SEUN — Main JavaScript (v3)
 // ========================================
 
-document.addEventListener('DOMContentLoaded', () => {
-
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // Load products from API if available
+    if (typeof loadProducts === 'function') {
+        await loadProducts();
+    }
     // ── Initialize all modules ────────────────
     CartUI.init();
     QuickView.init();
@@ -236,6 +240,44 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', () => {
             if (mobileMenu.classList.contains('open')) {
                 mobileMenu.classList.remove('open');
+            }
+        });
+    }
+
+    // ── Newsletter Subscription ────────────────
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = newsletterForm.querySelector('input[type="email"]');
+            const btn = newsletterForm.querySelector('button');
+            const originalBtnText = btn.innerHTML;
+            
+            if (!input || !input.value) return;
+
+            btn.innerHTML = '...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://localhost:5000/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: input.value })
+                });
+                
+                if (res.ok) {
+                    Toast.show('Subscribed successfully!', 'success');
+                    input.value = '';
+                } else {
+                    const data = await res.json();
+                    Toast.show(data.message || data.error || 'Failed to subscribe', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                Toast.show('Network error', 'error');
+            } finally {
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
             }
         });
     }
