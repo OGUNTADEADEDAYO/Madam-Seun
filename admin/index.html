@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madam Seun Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Krona+One&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ─────────────────────────── -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-glow"></div>
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-mark">MS</div>
+      <div>
+        <div class="login-brand">Madam Seun</div>
+        <div class="login-sub">Admin Control Panel</div>
+      </div>
+    </div>
+    <div id="loginError" class="alert-error hidden"></div>
+    <div class="form-group">
+      <label>Username or Email</label>
+      <input type="text" id="loginUsername" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-primary btn-full" id="loginBtn" onclick="login()">
+      <span>Sign In</span>
+    </button>
+    <p class="login-note">Access restricted to authorized personnel only.</p>
+  </div>
+</div>
+
+<!-- ── MAIN DASHBOARD ──────────────────────── -->
+<div id="dashboard" class="dashboard hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-mark sm">MS</div>
+        <span>Madam Seun</span>
+      </div>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="overview" onclick="navigateTo('overview')">
+        <span class="nav-icon">◈</span> Overview
+      </button>
+      <button class="nav-item" data-page="products" onclick="navigateTo('products')">
+        <span class="nav-icon">⬡</span> Products
+      </button>
+      <button class="nav-item" data-page="addProduct" onclick="navigateTo('addProduct')">
+        <span class="nav-icon">⊕</span> Add Product
+      </button>
+      <button class="nav-item" data-page="categories" onclick="navigateTo('categories')">
+        <span class="nav-icon">◫</span> Categories
+      </button>
+
+      <button class="nav-item" data-page="orders" onclick="navigateTo('orders')">
+        <span class="nav-icon">📦</span> Orders
+      </button>
+      <button class="nav-item" data-page="analytics" onclick="navigateTo('analytics')">
+        <span class="nav-icon">◎</span> Analytics
+      </button>
+
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-badge">
+        <div class="admin-avatar" id="adminAvatar">A</div>
+        <div>
+          <div class="admin-name" id="adminName">Admin</div>
+          <div class="admin-role" id="adminRole">superadmin</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="page-title" id="pageTitle">Overview</div>
+      <div class="topbar-right">
+        <div class="notif-badge" id="lowStockBadge" style="display:none">
+          <span>⚠</span> <span id="lowStockCount">0</span> low stock
+        </div>
+        <a href="../index.html" target="_blank" class="btn-outline-sm">View Store ↗</a>
+      </div>
+    </header>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- ── PAGE: OVERVIEW ──────────────────── -->
+    <section id="page-overview" class="page active">
+      <div class="stats-grid">
+        <div class="stat-card" style="--accent-color:#5b4ef8">
+          <div class="stat-icon">⬡</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statTotal">—</div>
+            <div class="stat-label">Total Products</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent-color:#10b981">
+          <div class="stat-icon">✓</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statInStock">—</div>
+            <div class="stat-label">In Stock</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent-color:#f04060">
+          <div class="stat-icon">✕</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statSoldOut">—</div>
+            <div class="stat-label">Sold Out</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent-color:#f59e0b">
+          <div class="stat-icon">⚠</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statLowStock">—</div>
+            <div class="stat-label">Low Stock</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--accent-color:#f59e0b">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statPreOrder">—</div>
+            <div class="stat-label">Pre-orders</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>🔥 Most Viewed Products</h3>
+          </div>
+          <div id="topViewedList" class="mini-list">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>⚠️ Low Stock Alerts</h3>
+          </div>
+          <div id="lowStockList" class="mini-list">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PAGE: PRODUCTS ─────────────────── -->
+    <section id="page-products" class="page">
+      <div class="page-controls">
+        <div class="search-wrap">
+          <input type="text" id="productSearch" placeholder="Search products..." oninput="debounceSearch()">
+        </div>
+        <div class="filter-wrap">
+          <select id="filterStatus" onchange="loadProducts()">
+            <option value="">All Status</option>
+            <option value="in_stock">In Stock</option>
+            <option value="pre_order">Pre-order</option>
+            <option value="sold_out">Sold Out</option>
+            <option value="hidden">Hidden</option>
+          </select>
+          <select id="filterCategory" onchange="loadProducts()">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="navigateTo('addProduct')">+ Add Product</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <tr><td colspan="6" class="table-loading">Loading products...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- ── PAGE: ADD/EDIT PRODUCT ─────────── -->
+    <section id="page-addProduct" class="page">
+      <div class="form-card">
+        <h2 id="formTitle">Add New Product</h2>
+        <input type="hidden" id="editProductId">
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Product Name *</label>
+            <input type="text" id="pName" placeholder="e.g. DL22 Phone Cooler">
+          </div>
+          <div class="form-group">
+            <label>SKU (optional)</label>
+            <input type="text" id="pSku" placeholder="e.g. AG-DL22">
+          </div>
+          <div class="form-group">
+            <label>Price (₦) *</label>
+            <input type="number" id="pPrice" placeholder="5000" min="0">
+          </div>
+          <div class="form-group">
+            <label>Compare At Price (₦) <span class="hint">for discounts</span></label>
+            <input type="number" id="pComparePrice" placeholder="7000" min="0">
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="pCategory" onchange="handleCategoryChange()">
+              <option value="">Select category...</option>
+            </select>
+            <div id="customCategoryWrap" style="display:none;margin-top:0.6rem">
+              <input type="text" id="customCategoryInput" placeholder="Type your custom category name..." style="width:100%">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Stock Quantity *</label>
+            <input type="number" id="pStock" placeholder="10" min="0">
+          </div>
+          <div class="form-group">
+            <label>Low Stock Alert Threshold</label>
+            <input type="number" id="pLowStock" placeholder="5" min="1" value="5">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="pStatus">
+              <option value="in_stock">In Stock</option>
+              <option value="pre_order">Pre-order</option>
+              <option value="sold_out">Sold Out</option>
+              <option value="hidden">Hidden</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Description *</label>
+          <textarea id="pDescription" rows="4" placeholder="Describe the product features, specifications, and what makes it great..."></textarea>
+        </div>
+
+        <div class="form-group full">
+          <label>Product Images</label>
+          <div class="image-input-wrap">
+            <div id="imageList" class="image-list"></div>
+            <div class="image-add-row" style="flex-direction: column; align-items: stretch; gap: 0.5rem; margin-top: 1rem;">
+              <label for="imageFileInput" class="btn-outline-sm" style="text-align: center; cursor: pointer; padding: 1.5rem; border: 2px dashed var(--glass-border); border-radius: 8px; background: rgba(255,255,255,0.02); transition: all 0.2s;">
+                <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">📸</span>
+                Click to select photos from your device
+              </label>
+              <input type="file" id="imageFileInput" multiple accept="image/*" style="display: none;" onchange="handleImageFiles(event)">
+              <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem;">
+                <span style="color: var(--text3); font-size: 0.8rem; white-space: nowrap;">Or paste URL:</span>
+                <input type="text" id="imageUrlInput" placeholder="https://..." style="flex: 1;">
+                <button class="btn-outline-sm" onclick="addImageUrl()">Add URL</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label>Tags <span class="hint">comma-separated</span></label>
+          <input type="text" id="pTags" placeholder="cooler, mobile, gaming, ios">
+        </div>
+
+        <div class="form-group full">
+          <label>TikTok Demo Link <span class="hint">optional — shows "Watch Demo" button on store</span></label>
+          <input type="text" id="pTiktok" placeholder="https://vt.tiktok.com/...">
+        </div>
+
+        <div class="form-row">
+          <label class="toggle-label">
+            <input type="checkbox" id="pFeatured">
+            <span class="toggle"></span>
+            Feature this product on the store
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="resetForm()">Cancel</button>
+          <button class="btn-primary" id="saveProductBtn" onclick="saveProduct()">
+            Save Product
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PAGE: CATEGORIES ───────────────── -->
+    <section id="page-categories" class="page">
+      <div class="form-card" style="max-width:480px;margin-bottom:2rem">
+        <h3>Add Category</h3>
+        <div class="form-grid cols-2">
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="catName" placeholder="Phone Coolers">
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <button class="btn-primary btn-full" onclick="addCategory()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>All Categories</h3></div>
+        <div id="categoriesList" class="categories-grid">Loading...</div>
+      </div>
+    </section>
+
+
+
+    <!-- ── PAGE: ORDERS ─────────────────────── -->
+    <section id="page-orders" class="page">
+      <div class="card">
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+          <h3>Customer Orders</h3>
+          <button class="btn-ghost btn-sm" onclick="loadOrders()">↻ Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table class="products-table" style="min-width: 800px;">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total / Shipping</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr><td colspan="6" class="table-loading">Loading orders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PAGE: ANALYTICS ─────────────────────── -->
+    <section id="page-analytics" class="page">
+      <div class="analytics-grid">
+        <div class="card full">
+          <div class="card-header"><h3>📈 Top Selling Products</h3></div>
+          <div id="topSellingList" class="mini-list">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>👁 Most Viewed</h3></div>
+          <div id="analyticsTopViewed" class="mini-list">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>📦 By Category</h3></div>
+          <div id="categoryBreakdown" class="mini-list">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── CONFIRM DIALOG ─────────────────────────── -->
+<div id="confirmOverlay" class="overlay-backdrop hidden">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div id="confirmMessage">Are you sure?</div>
+    <div class="confirm-actions">
+      <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirmYes">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── STOCK EDITOR MODAL ─────────────────────── -->
+<div id="stockOverlay" class="overlay-backdrop hidden">
+  <div class="confirm-box">
+    <h3 style="margin-bottom:1rem;font-size:1rem">Adjust Stock</h3>
+    <div style="font-size:0.8rem;color:var(--text3);margin-bottom:1rem" id="stockProductName"></div>
+    <div class="form-group">
+      <label>Action</label>
+      <select id="stockAction">
+        <option value="set">Set exact quantity</option>
+        <option value="increment">Add units</option>
+        <option value="decrement">Reduce units (simulate order)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Quantity</label>
+      <input type="number" id="stockQty" value="1" min="0">
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-ghost" onclick="closeStockModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitStockUpdate()">Update Stock</button>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
