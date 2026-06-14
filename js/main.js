@@ -13,42 +13,70 @@ document.addEventListener('DOMContentLoaded', async () => {
     QuickView.init();
     Checkout.init();
 
-    // ── Auto-assign product IDs to cards ──────
-    // Match cards to PRODUCTS by name + price text
-    function assignProductIds() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            if (card.getAttribute('data-product-id')) return; // Already assigned
+    // ── Dynamic Rendering of Products ──────────
+    function renderProductCards(containerSelector, products) {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
 
-            const nameEl = card.querySelector('.product-name');
-            const priceEl = card.querySelector('.product-price');
-            if (!nameEl || !priceEl) return;
+        if (products.length === 0) {
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">No products found.</p>';
+            return;
+        }
 
-            const name = nameEl.textContent.trim();
-            const priceText = priceEl.textContent.trim();
+        container.innerHTML = products.map(p => `
+            <div class="product-card" data-product-id="${p.id}">
+                <div class="product-image">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='placeholder.webp'">
+                    ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <p class="product-name">${p.name}</p>
+                    <p class="product-price">${formatPrice(p.price)}</p>
+                </div>
+                <button class="add-to-cart-btn">ADD TO CART</button>
+            </div>
+        `).join('');
+    }
 
-            // Find matching product
-            const match = PRODUCTS.find(p => {
-                const formattedPrice = formatPrice(p.price);
-                return p.name === name && formattedPrice === priceText;
-            });
+    function renderAllProducts() {
+        // Best Sellers section
+        const bestSellers = PRODUCTS.filter(p => p.categories.includes('best-sellers')).slice(0, 4);
+        renderProductCards('#best-sellers .products-grid', bestSellers);
 
-            if (match) {
-                card.setAttribute('data-product-id', match.id);
-            }
+        // New Arrivals section (top)
+        const newArrivals = PRODUCTS.filter(p => p.categories.includes('new-arrivals')).slice(0, 4);
+        renderProductCards('#new-arrivals .products-grid', newArrivals);
+
+        // Category Tabs
+        const tabs = [
+            { id: 'panel-all', cat: 'all' },
+            { id: 'panel-men', cat: 'men' },
+            { id: 'panel-unisex', cat: 'unisex' },
+            { id: 'panel-new-arrivals', cat: 'new-arrivals-tab' },
+            { id: 'panel-gift-sets', cat: 'gift-sets' },
+            { id: 'panel-brands', cat: 'brands' },
+            { id: 'panel-women', cat: 'women' }
+        ];
+
+        tabs.forEach(tab => {
+            // For 'all' we can just show all products, or slice to a reasonable number
+            const prods = tab.cat === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.categories.includes(tab.cat));
+            renderProductCards(`#${tab.id} .products-grid`, prods);
         });
     }
 
-    assignProductIds();
+    renderAllProducts();
 
     // ── Add to Cart from product cards ─────────
     function bindAddToCartButtons() {
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            // Avoid double-binding
             if (btn.hasAttribute('data-bound')) return;
             btn.setAttribute('data-bound', 'true');
 
             btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Don't trigger card click (quickview)
+                e.stopPropagation();
 
                 const card = btn.closest('.product-card');
                 const productId = card ? card.getAttribute('data-product-id') : null;
@@ -61,11 +89,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
 
-                // Visual feedback on button
                 const originalText = btn.textContent;
                 btn.textContent = 'ADDED ✓';
-                btn.style.background = '#1A1A1A';
-                btn.style.color = '#FFFFFF';
+                btn.style.background = '#c9b48e';
+                btn.style.color = '#1A1A1A';
 
                 setTimeout(() => {
                     btn.textContent = originalText;
@@ -85,7 +112,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.setAttribute('data-qv-bound', 'true');
 
             card.addEventListener('click', (e) => {
-                // Don't open quickview if clicking the add-to-cart button
                 if (e.target.closest('.add-to-cart-btn')) return;
 
                 const productId = card.getAttribute('data-product-id');
@@ -212,7 +238,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     observeVisibleCards();
 
                     // Re-bind any new cards
-                    assignProductIds();
                     bindAddToCartButtons();
                     bindQuickView();
                 }

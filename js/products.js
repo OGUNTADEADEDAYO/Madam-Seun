@@ -2,7 +2,7 @@
 // SEUN — Product Data Catalog
 // ========================================
 
-let PRODUCTS = FALLBACK_PRODUCTS;
+// PRODUCTS will be initialized after FALLBACK_PRODUCTS
 
 const FALLBACK_PRODUCTS = [
 
@@ -328,6 +328,8 @@ const FALLBACK_PRODUCTS = [
     }
 ];
 
+let PRODUCTS = FALLBACK_PRODUCTS;
+
 // Helper: Find product by ID
 function getProductById(id) {
     return PRODUCTS.find(p => p.id === id) || null;
@@ -355,7 +357,9 @@ async function loadProducts() {
                 id: p.sku || p._id,
                 name: p.name,
                 price: p.price,
-                image: p.images && p.images[0] ? p.images[0].url.replace(/^\//, '') : '',
+                image: p.images && p.images[0] 
+                    ? (p.images[0].url.startsWith('/uploads') ? 'http://localhost:5000' + p.images[0].url : p.images[0].url.replace(/^\//, '')) 
+                    : 'placeholder.webp',
                 size: p.size,
                 categories: p.tags || [],
                 badge: p.badge,
