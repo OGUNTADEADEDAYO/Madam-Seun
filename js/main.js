@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="product-card" data-product-id="${p.id}">
                 <div class="product-image">
                     <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='placeholder.webp'">
-                    ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
                 </div>
                 <div class="product-info">
                     <p class="product-name">${p.name}</p>
@@ -52,17 +51,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             { id: 'panel-all', cat: 'all' },
             { id: 'panel-men', cat: 'men' },
             { id: 'panel-unisex', cat: 'unisex' },
-            { id: 'panel-new-arrivals', cat: 'new-arrivals-tab' },
+            { id: 'panel-new-arrivals', cat: 'new-arrivals' },
             { id: 'panel-gift-sets', cat: 'gift-sets' },
             { id: 'panel-brands', cat: 'brands' },
             { id: 'panel-women', cat: 'women' }
         ];
 
         tabs.forEach(tab => {
-            // For 'all' we can just show all products, or slice to a reasonable number
-            const prods = tab.cat === 'all' 
-                ? PRODUCTS 
-                : PRODUCTS.filter(p => p.categories.includes(tab.cat));
+            const prods = tab.cat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.categories.includes(tab.cat));
             renderProductCards(`#${tab.id} .products-grid`, prods);
         });
     }
