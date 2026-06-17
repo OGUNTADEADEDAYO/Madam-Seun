@@ -7,7 +7,7 @@
 // Change this to your deployed backend URL
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:'
     ? 'http://localhost:5000/api'
-    : 'https://madamseun-api.onrender.com/api'; // Update when deployed
+    : 'https://madam-seun-api.onrender.com/api'; // Update when deployed
 
 // ── STATE ───────────────────────────────────────────
 let authToken = localStorage.getItem('ag_admin_token') || null;
