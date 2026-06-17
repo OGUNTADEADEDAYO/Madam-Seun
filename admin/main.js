@@ -937,3 +937,5 @@ document.getElementById('confirmOverlay').addEventListener('click', e => {
 document.getElementById('stockOverlay').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeStockModal();
 });
+
+// Trigger Vercel build
